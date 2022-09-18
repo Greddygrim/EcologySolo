@@ -1,22 +1,20 @@
 import React from "react";
 import emailjs from "emailjs-com";
-const Mailer = () => {
-  function sendEmail(e) {
-    e.preventDefault();
+function sendEmail(e) {
+  e.preventDefault();
 
-    emailjs
-      .sendForm(
-        "service_90a5bq9",
-        "template_7h06wzn",
-        e.target,
-        "EaLEXQ85BwzYUAjF8"
-      )
-      .then((res) => {
-        console.log(res);
-      })
-      .catch((err) => console.log(err));
-  }
-};
+  emailjs
+    .sendForm(
+      "service_90a5bq9",
+      "template_7h06wzn",
+      e.target,
+      "EaLEXQ85BwzYUAjF8"
+    )
+    .then((res) => {
+      console.log(res);
+    })
+    .catch((err) => console.log(err));
+}
 export const Contact = () => {
   return (
     <div

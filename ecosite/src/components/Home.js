@@ -32,9 +32,21 @@ export const Home = () => {
           <img data-src="/smalltreemaker.jpg" className="swiper-lazy" />
           <div className="swiper-lazy-preloader swiper-lazy-preloader-white"></div>
         </SwiperSlide>
-        <SwiperSlide>Slide 2</SwiperSlide>
-        <SwiperSlide>Slide 3</SwiperSlide>
-        <SwiperSlide>Slide 4</SwiperSlide>
+        <SwiperSlide>
+          <h1 className="swiper-header">Protect our Oceans</h1>
+          <img data-src="oceans.jpg" className="swiper-lazy" />
+          <div className="swiper-lazy-preloader swiper-lazy-preloader-white"></div>
+        </SwiperSlide>
+        <SwiperSlide>
+          <h1 className="swiper-header">Save the Bees</h1>
+          <img data-src="bees.jpg" className="swiper-lazy" />
+          <div className="swiper-lazy-preloader swiper-lazy-preloader-white"></div>
+        </SwiperSlide>
+        <SwiperSlide>
+          <h1 className="swiper-header">Defend Our Forrest</h1>
+          <img data-src="forrest.jpg" className="swiper-lazy" />
+          <div className="swiper-lazy-preloader swiper-lazy-preloader-white"></div>
+        </SwiperSlide>
       </Swiper>
       <Footer />
     </div>

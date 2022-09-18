@@ -14,67 +14,79 @@ app.use(
 );
 
 app.get("/", (req, res) => {
-  [res.json({ message: "hello" })];
+  try {
+    [res.json({ message: "hello" })];
+  } catch (err) {
+    console.log(err);
+  }
 });
 
 app.post("/login", async (req, res) => {
-  const userData = req.body;
-  console.log(userData);
+  try {
+    const userData = req.body;
+    console.log("user data: ", userData);
 
-  // first we need to see if user with particular email exists
-  const UserMmodel = models.User;
-  const user = await UserMmodel.findOne({ email: userData.email }).exec();
+    // first we need to see if user with particular email exists
+    const UserMmodel = models.User;
+    const user = await UserMmodel.findOne({ email: userData.email }).exec();
+    console.log("user: ", user);
+    // if we don't have a user, send an error message to the client, and return from the function
+    if (!user) {
+      res.json({ error: true, msg: "Could not Login in" });
+      return;
+    }
 
-  // if we don't have a user, send an error message to the client, and return from the function
-  if (!user) {
-    res.json({ error: true, msg: "Could not Login in" });
-    return;
-  }
+    // validate the password using bcrpyt
+    const matchedPasswords = await bcrypt.compare(
+      userData.password,
+      user.password
+    );
+    if (!matchedPasswords) {
+      res.json({ error: true, msg: "Could no Login" });
+      return;
+    }
 
-  // validate the password using bcrpyt
-  const matchedPasswords = await bcrypt.compare(
-    userData.password,
-    user.password
-  );
-  if (!matchedPasswords) {
-    res.json({ error: true, msg: "Could no Login" });
-    return;
-  }
-
-  // create a jwt token to authorize user
-  const token = jwt.sign(
-    {
-      data: {
-        email: user.email,
+    // create a jwt token to authorize user
+    const token = jwt.sign(
+      {
+        data: {
+          email: user.email,
+        },
+        exp: 1000000000,
       },
-      exp: 1000000000,
-    },
-    "supersecretstring182jsjv0asd"
-  );
+      "supersecretstring182jsjv0asd"
+    );
 
-  console.log("'User: ", user);
-  res.json({ sucess: "true", token: token });
+    console.log("'User: ", user);
+    res.json({ sucess: "true", token: token });
+  } catch (err) {
+    console.log("Error logging in: ", err.message);
+    res.json({ error: true, msg: err.message });
+  }
 });
 app.post("/register", async (req, res) => {
-  const userData = req.body;
-  console.log(userData);
+  try {
+    const userData = req.body;
+    console.log(userData);
+    // Check if password and confirm_password are the same
+    if (userData.password !== userData.confirm_password) {
+      res.json({ error: true, msg: "Could not register user" });
+      return;
+    }
 
-  // Check if password and confirm_password are the same
-  if (userData.password !== userData.confirm_password) {
-    res.json({ error: true, msg: "Could not register user" });
-    return;
+    // hash user password
+    const hashedPassword = bcrypt.hashSync(userData.password, 14);
+
+    const UserMmodel = models.User;
+    const newUser = await UserMmodel.create({
+      email: userData.email,
+      password: hashedPassword,
+    });
+
+    res.json(newUser);
+  } catch (error) {
+    console.log("you made an error");
   }
-
-  // hash user password
-  const hashedPassword = bcrypt.hashSync(userData.password, 14);
-
-  const UserMmodel = models.User;
-  const newUser = await UserMmodel.create({
-    email: userData.email,
-    password: hashedPassword,
-  });
-
-  res.json(newUser);
 });
 connectDB()
   .then(() => {

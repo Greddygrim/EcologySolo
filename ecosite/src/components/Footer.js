@@ -1,12 +1,13 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import "../index.css";
 export const Footer = () => {
   return (
     <div>
-      <footer class="footer">
-        <div class="container">
-          <div class="row">
-            <div class="footer-col">
+      <footer className="footer">
+        <div className="container">
+          <div className="row">
+            <div className="footer-col">
               <h4>Menu</h4>
               <div className="footernav-links">
                 <Link to="/contact">Contact</Link>
@@ -16,7 +17,7 @@ export const Footer = () => {
                 <Link to="/login">Login</Link>
               </div>
             </div>
-            <div class="footer-col">
+            <div className="footer-col">
               <h4>Follow us</h4>
               <div className="socialmedia-links">
                 <a href="#">Facebook</a>
